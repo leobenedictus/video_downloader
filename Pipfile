@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 streamlit = "*"
 yt-dlp = "*"
+os = "*"
 
 [dev-packages]
 ipykernel = "*"

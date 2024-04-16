@@ -1,15 +1,20 @@
 import streamlit as st
 import yt_dlp
+import os
 
 def download_video(url):
+    # Create a directory to store the downloaded videos
+    download_dir = os.path.join(os.path.dirname(__file__), 'downloads')
+    os.makedirs(download_dir, exist_ok=True)
+
     ydl_opts = {
-        'outtmpl': '%(title).50s.%(ext)s'
+        'outtmpl': os.path.join(download_dir, '%(title).50s.%(ext)s')
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         filename = ydl.prepare_filename(info)
         ydl.download([url])
-    return filename
+    return os.path.join(download_dir, filename)
 
 st.title("Video Downloader")
 
@@ -18,12 +23,12 @@ url = st.text_input("Enter the video URL:")
 if st.button("Download"):
     try:
         filename = download_video(url)
-        st.success(f"Download complete! The video is saved as {filename}")
+        st.success(f"Download complete! The video is saved as {os.path.basename(filename)}")
         with open(filename, "rb") as file:
             st.download_button(
                 label="Download Video",
                 data=file,
-                file_name=filename,
+                file_name=os.path.basename(filename),
                 mime="video/mp4",
             )
     except Exception as e:
