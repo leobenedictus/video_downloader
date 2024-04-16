@@ -22,7 +22,7 @@ def download_video(url):
         (
             ffmpeg
             .input(full_path)
-            .output(full_path, codec='libx264', f'mp4')
+            .output(full_path, vcodec='libx264', f='mp4')
             .run()
         )
 
