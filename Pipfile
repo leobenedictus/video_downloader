@@ -9,7 +9,7 @@ yt-dlp = "*"
 
 [dev-packages]
 ipykernel = "*"
-ffmpeg-python = "*"
+ffmpeg-bin = "*"
 
 [requires]
 python_version = "3.10"
