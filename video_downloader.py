@@ -13,8 +13,12 @@ def download_video(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         filename = ydl.prepare_filename(info)
+        full_path = os.path.join(download_dir, filename)
         ydl.download([url])
-    return os.path.join(download_dir, filename)
+        if os.path.exists(full_path):
+            return full_path
+        else:
+            raise FileNotFoundError(f"Failed to download the video to {full_path}")
 
 st.title("Video Downloader")
 
