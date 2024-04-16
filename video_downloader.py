@@ -1,20 +1,19 @@
 import streamlit as st
 import yt_dlp
 import os
+import tempfile
 
 def download_video(url):
-    # Create a directory to store the downloaded videos
-    download_dir = os.path.join(os.path.dirname(__file__), 'downloads')
-    os.makedirs(download_dir, exist_ok=True)
-
-    ydl_opts = {
-        'outtmpl': os.path.join(download_dir, '%(title).50s.%(ext)s')
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        filename = ydl.prepare_filename(info)
-        ydl.download([url])
-    return os.path.join(download_dir, filename)
+    # Create a temporary directory to store the downloaded videos
+    with tempfile.TemporaryDirectory() as temp_dir:
+        ydl_opts = {
+            'outtmpl': os.path.join(temp_dir, '%(title).50s.%(ext)s')
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            filename = ydl.prepare_filename(info)
+            ydl.download([url])
+            return os.path.join(temp_dir, filename)
 
 st.title("Video Downloader")
 
