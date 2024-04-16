@@ -8,7 +8,8 @@ def download_video(url):
     os.makedirs(download_dir, exist_ok=True)
 
     ydl_opts = {
-        'outtmpl': os.path.join(download_dir, '%(title).50s.%(ext)s')
+        'outtmpl': os.path.join(download_dir, '%(title).50s.%(ext)s'),
+        'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
