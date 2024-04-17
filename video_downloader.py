@@ -1,7 +1,7 @@
 import streamlit as st
 import yt_dlp
 import os
-import ffmpeg
+import subprocess
 
 def download_video(url):
     # Create a directory to store the downloaded videos
@@ -18,13 +18,8 @@ def download_video(url):
         full_path = os.path.join(download_dir, filename)
         ydl.download([url])
 
-        # Use ffmpeg-python to ensure the video is in the correct format
-        (
-            ffmpeg
-            .input(full_path)
-            .output(full_path, vcodec='libx264', f='mp4')
-            .run()
-        )
+        # Use the ffmpeg command-line tool to ensure the video is in the correct format
+        subprocess.run(['ffmpeg', '-i', full_path, '-c', 'copy', '-f', 'mp4', full_path])
 
         if os.path.exists(full_path):
             return full_path
